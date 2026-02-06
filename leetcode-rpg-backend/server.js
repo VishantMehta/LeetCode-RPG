@@ -1,15 +1,19 @@
 
+const cors = require('cors');
 require('dotenv').config();
 require('./src/config/db'); 
 const express = require('express');
-const cors = require('cors');
 const app = express();
 const { fetchUserStats } = require('./src/utils/leetcode');
 const userRoutes = require('./src/routes/userRoutes');
 
 
+app.use(cors({
+    origin: '*', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
 app.use('/api/users', userRoutes);
-app.use(cors());
 app.use(express.json());
 
 app.get('/health', (req, res) => {
