@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Sword, Loader2 } from 'lucide-react';
 import XpBar from './components/XpBar';
 import BadgeGallery from './components/BadgeGallery';
+import SkillTree from './components/SkillTree';
 
 import axios from 'axios';
 
@@ -101,6 +102,8 @@ function App() {
             </div>
           </div>
 
+          <SkillTree skills={playerData.rpg_skills} />
+          
           <BadgeGallery currentLevel={playerData.user.current_level} />
 
           <button 
