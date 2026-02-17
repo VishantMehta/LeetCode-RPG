@@ -103,9 +103,9 @@ function App() {
           </div>
 
           <SkillTree skills={playerData.rpg_skills} />
-          
-          <BadgeGallery currentLevel={playerData.user.current_level} />
 
+          {/* <BadgeGallery currentLevel={playerData.user.current_level} /> */}
+          <BadgeGallery unlockedBadges={playerData.unlocked_badges} />
           <button 
             onClick={() => setPlayerData(null)}
             className="mt-8 text-gray-400 hover:text-white underline text-sm"

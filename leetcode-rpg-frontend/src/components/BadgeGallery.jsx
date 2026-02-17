@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Shield, Star, Crown, Zap, Flame } from 'lucide-react';
 
-const BadgeGallery = ({ currentLevel }) => {
+const BadgeGallery = ({ unlockedBadges = [] }) => {
   const BADGES = [
     { id: 1, name: "Novice Solver", icon: Star, reqLevel: 5, color: "text-blue-400", bg: "bg-blue-400/10", border: "border-blue-500/30" },
     { id: 2, name: "Code Warrior", icon: Shield, reqLevel: 10, color: "text-green-400", bg: "bg-green-400/10", border: "border-green-500/30" },
@@ -18,7 +18,7 @@ const BadgeGallery = ({ currentLevel }) => {
       
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {BADGES.map((badge, index) => {
-          const isUnlocked = currentLevel >= badge.reqLevel;
+          const isUnlocked = unlockedBadges.includes(badge.name);
 
           return (
             <motion.div
@@ -32,7 +32,6 @@ const BadgeGallery = ({ currentLevel }) => {
                 ${isUnlocked ? `${badge.bg} ${badge.border} shadow-[0_0_15px_rgba(255,255,255,0.05)]` : 'bg-darkBg border-gray-800 opacity-60 grayscale'}
               `}
             >
-              {/* Badge Icon */}
               <div className={`mb-3 ${isUnlocked ? badge.color : 'text-gray-600'}`}>
                 <badge.icon size={40} strokeWidth={isUnlocked ? 2 : 1.5} />
               </div>
