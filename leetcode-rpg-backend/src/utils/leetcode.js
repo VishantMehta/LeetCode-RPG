@@ -5,16 +5,17 @@ const fetchUserStats = async (username) => {
         query getUserProfile($username: String!) {
             matchedUser(username: $username) {
                 submitStats: submitStatsGlobal {
-                    acSubmissionNum {
-                        difficulty
-                        count
-                    }
+                    acSubmissionNum { difficulty count }
                 }
                 tagProblemCounts {
                     advanced { tagName problemsSolved }
                     intermediate { tagName problemsSolved }
                     fundamental { tagName problemsSolved }
                 }
+            }
+            recentAcSubmissionList(username: $username, limit: 5) {
+                title
+                timestamp
             }
         }
     `;

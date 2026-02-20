@@ -64,7 +64,8 @@ const syncUserProfile = async (req, res) => {
                 user: userResult.rows[0],
                 leetcode_stats: { easySolved: stats.easySolved, mediumSolved: stats.mediumSolved, hardSolved: stats.hardSolved },
                 rpg_skills: skills,
-                unlocked_badges: unlockedBadgeNames 
+                unlocked_badges: unlockedBadgeNames,
+                recent_activity: stats.recentSubmissions
             }
         });
 
