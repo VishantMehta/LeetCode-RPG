@@ -55,7 +55,8 @@ const fetchUserStats = async (username) => {
             easySolved: stats.find(item => item.difficulty === 'Easy').count,
             mediumSolved: stats.find(item => item.difficulty === 'Medium').count,
             hardSolved: stats.find(item => item.difficulty === 'Hard').count,
-            topicStats: tagCounts 
+            topicStats: tagCounts ,
+            recentSubmissions: data.data.recentAcSubmissionList
         };
 
     } catch (error) {

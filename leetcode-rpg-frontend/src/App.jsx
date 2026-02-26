@@ -4,6 +4,7 @@ import { Sword, Loader2 } from 'lucide-react';
 import XpBar from './components/XpBar';
 import BadgeGallery from './components/BadgeGallery';
 import SkillTree from './components/SkillTree';
+import BattleLog from './components/BattleLog';
 
 import axios from 'axios';
 
@@ -104,8 +105,11 @@ function App() {
 
           <SkillTree skills={playerData.rpg_skills} />
 
+          <BattleLog recentActivity={playerData.recent_activity} />
+
           {/* <BadgeGallery currentLevel={playerData.user.current_level} /> */}
           <BadgeGallery unlockedBadges={playerData.unlocked_badges} />
+
           <button 
             onClick={() => setPlayerData(null)}
             className="mt-8 text-gray-400 hover:text-white underline text-sm"
