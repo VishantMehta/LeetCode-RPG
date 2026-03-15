@@ -1,14 +1,29 @@
 const { pool } = require('../config/db');
+const redisClient = require('../config/redis'); 
 const { fetchUserStats } = require('../utils/leetcode');
 const { calculateTotalXP, calculateLevel, mapTagsToSkills } = require('../utils/gamification');
 
 const syncUserProfile = async (req, res) => {
     const { username } = req.params;
+
+    try {
+        const cacheKey = `user_profile:${username}`;
+        const cachedData = await redisClient.get(cacheKey);
+
+        if (cachedData) {
+            console.log(`⚡ CACHE HIT: Returning blazing fast data for ${username}`);
+            return res.status(200).json(JSON.parse(cachedData));
+        }
+        
+        console.log(`CACHE MISS: Fetching fresh data from LeetCode for ${username}`);
+    } 
+    catch (cacheErr) {
+        console.log("Redis check skipped due to error.");
+    }
+
     const client = await pool.connect();
 
     try {
-        console.log(`🗡️ Starting Advanced Sync for warrior: ${username}`);
-
         const stats = await fetchUserStats(username);
         const totalXp = calculateTotalXP(stats.easySolved, stats.mediumSolved, stats.hardSolved);
         const currentLevel = calculateLevel(totalXp);
@@ -34,40 +49,38 @@ const syncUserProfile = async (req, res) => {
             `, [userId, skillName, skillXp, skillLevel]);
         }
 
-
         const badgesResult = await client.query("SELECT * FROM Badges WHERE condition_type = 'LEVEL'");
-        const allBadges = badgesResult.rows;
-
-        for (const badge of allBadges) {
+        for (const badge of badgesResult.rows) {
             if (currentLevel >= badge.condition_value) {
-                await client.query(`
-                    INSERT INTO User_Badges (user_id, badge_id)
-                    VALUES ($1, $2)
-                    ON CONFLICT DO NOTHING;
-                `, [userId, badge.id]);
+                await client.query(`INSERT INTO User_Badges (user_id, badge_id) VALUES ($1, $2) ON CONFLICT DO NOTHING;`, [userId, badge.id]);
             }
         }
 
-        const unlockedBadgesResult = await client.query(`
-            SELECT b.name FROM User_Badges ub
-            JOIN Badges b ON ub.badge_id = b.id
-            WHERE ub.user_id = $1;
-        `, [userId]);
-        
+        const unlockedBadgesResult = await client.query(`SELECT b.name FROM User_Badges ub JOIN Badges b ON ub.badge_id = b.id WHERE ub.user_id = $1;`, [userId]);
         const unlockedBadgeNames = unlockedBadgesResult.rows.map(row => row.name);
 
         await client.query('COMMIT'); 
 
-        res.status(200).json({
+        const finalResponse = {
             status: 'success',
             data: {
                 user: userResult.rows[0],
                 leetcode_stats: { easySolved: stats.easySolved, mediumSolved: stats.mediumSolved, hardSolved: stats.hardSolved },
                 rpg_skills: skills,
                 unlocked_badges: unlockedBadgeNames,
-                recent_activity: stats.recentSubmissions
+                recent_activity: stats.recentSubmissions 
             }
-        });
+        };
+
+        try {
+            const cacheKey = `user_profile:${username}`;
+            await redisClient.setEx(cacheKey, 3600, JSON.stringify(finalResponse));
+            console.log(`Saved ${username}'s profile to Cache for 1 Hour.`);
+        } catch (cacheErr) {
+            console.log("Could not save to Redis.");
+        }
+
+        res.status(200).json(finalResponse);
 
     } catch (error) {
         await client.query('ROLLBACK');
