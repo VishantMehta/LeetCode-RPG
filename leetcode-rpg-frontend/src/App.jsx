@@ -54,6 +54,7 @@ function App() {
             <main className="w-full max-w-7xl mx-auto flex-grow flex justify-center items-start">
               <Routes>
                 <Route path="/dashboard" element={<DashboardPage data={playerData} />} />
+
                 <Route path="/skills" element={<SkillsPage skills={playerData.rpg_skills} />} />
                 <Route path="/inventory" element={<InventoryPage badges={playerData.unlocked_badges} />} />
                 <Route path="/activity" element={<ActivityPage activity={playerData.recent_activity} />} />

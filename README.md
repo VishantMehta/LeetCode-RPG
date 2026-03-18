@@ -165,25 +165,3 @@ npm run dev
 
 Navigate to `http://localhost:5173` in your browser. Enter a valid LeetCode username (e.g., `vishant_mehta` or `striver_79`) and click **Enter Dungeon**!
 ```
-
-Baaki pura README ekdum aag hai! GitHub par commit maarne ke liye bilkul ready hai. 🚀
-
----
-
-### 🚦 The Final Crossroads
-
-Ab hamara Code aur Documentation dono lock ho chuke hain. 
-
-Aap decide kijiye humari next aur final stage kya hogi:
-
-**🛡️ Option A: The FAANG Deep Dive & ADRs (Architecture Review)**
-* Hum architecture ke **ADRs (Architecture Decision Records)** likhenge.
-* Main aapse is project par FAANG level ke cross-questions poochunga aur unke answers bataunga (e.g., "Aapne REST ki jagah GraphQL API kyu hit ki?", "Database Transaction fail hone par kya hoga?").
-
-**🌍 Option B: Production Deployment (Make it Live!)**
-* Localhost se nikal kar internet par aana.
-* Database ko **Neon/Supabase** (Free Cloud DB) par daalna.
-* Backend ko **Render** par host karna.
-* Frontend ko **Vercel** par deploy karna.
-
-Bataiye Warrior, next phase kaunsa lock kiya jaye? Option A ya Option B?
