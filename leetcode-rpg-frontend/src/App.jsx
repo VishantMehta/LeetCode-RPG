@@ -18,9 +18,10 @@ function App() {
     if (!username) return alert("Pehle LeetCode username daalo warrior!");
     setLoading(true);
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/api/users/sync/${username}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/sync/${username}`);
       setPlayerData(response.data.data);
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error syncing:", error);
       alert("Sync fail ho gaya. Kya backend chal raha hai?");
     }
